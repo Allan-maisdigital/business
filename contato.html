@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contato - +DIGITAL</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Reset e Configurações Gerais */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      background-color: #0a0f2c;
+      color: white;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    body.light-mode {
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    /* Header */
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(10,15,44,0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+    }
+    body.light-mode header {
+      background: rgba(255,255,255,0.9);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00bfff;
+      text-decoration: none;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    body.light-mode nav ul li a {
+      color: #333;
+    }
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #00bfff;
+      left: 0;
+      bottom: -4px;
+      transition: width 0.3s;
+    }
+    nav ul li a:hover::after,
+    nav ul li a.active::after {
+      width: 100%;
+    }
+    /* Botão Toggle Modo Claro/Escuro */
+    .toggle-theme {
+      background: none;
+      border: 2px solid #00bfff;
+      color: #00bfff;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 1rem;
+      transition: background 0.3s, color 0.3s;
+    }
+    .toggle-theme:hover {
+      background-color: #00bfff;
+      color: #0a0f2c;
+    }
+    body.light-mode .toggle-theme {
+      border-color: #007acc;
+      color: #007acc;
+    }
+    body.light-mode .toggle-theme:hover {
+      background-color: #007acc;
+      color: white;
+    }
+    /* Botão Voltar ao Topo */
+    #btnTop {
+      display: none;
+      position: fixed;
+      bottom: -400px;
+      right: 30px;
+      z-index: 50;
+      font-size: 24px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease;
+    }
+    #btnTop:hover { background-color: #0056b3; }
+    /* Menu Mobile */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 4px 0;
+    }
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #0a0f2c;
+        width: 200px;
+        padding: 1rem;
+      }
+      nav ul.active { display: flex; }
+      .menu-toggle { display: flex; }
+    }
+    /* Hero Section - Contato */
+    .hero-contato {
+      height: 100vh;
+      background: linear-gradient(rgba(10,15,44,0.7), rgba(10,15,44,0.7)), url('imagens/contato.jpg') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .hero-contato h1 {
+      font-size: 3rem;
+      background: linear-gradient(to right, #00bfff, #6a5acd);
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: fadeInUp 1s ease forwards;
+      text-decoration: underline;
+    }
+    .hero-contato p {
+      font-size: 1.3rem;
+      color: #eee;
+      font-style: italic;
+      margin-top: 1rem;
+      animation: fadeInUp 1.5s ease forwards;
+    }
+    /* Conteúdo da Página */
+    section.conteudo {
+      padding: 5rem 2rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    section.conteudo h1 {
+      color: #00bfff;
+      margin-bottom: 1rem;
+    }
+    section.conteudo p {
+      margin-bottom: 1rem;
+    }
+    /* Introdução Amigável */
+    .intro-contato {
+      background: rgba(255,255,255,0.05);
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    /* Formulário de Contato */
+    .formulario-contato {
+      background: rgba(255,255,255,0.1);
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    .formulario-contato input,
+    .formulario-contato textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    .formulario-contato button {
+      background: #00bfff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .formulario-contato button:hover { background: #0077cc; }
+    /* Informações de Contato Diretas */
+    .info-contato {
+      background: rgba(255,255,255,0.05);
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    .info-contato ul { list-style-type: none; padding: 0; }
+    .info-contato li { margin-bottom: 0.5rem; }
+    .info-contato li strong { color: #00bfff; }
+    /* Horário de Atendimento */
+    .horario-atendimento {
+      background: rgba(255,255,255,0.05);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    /* Mapa de Localização */
+    .mapa-localizacao { margin-bottom: 2rem; }
+    .mapa-localizacao iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 8px;
+    }
+    /* FAQ */
+    .faq {
+      background: rgba(255,255,255,0.05);
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    .faq h2 { color: #00bfff; margin-bottom: 1rem; }
+    .faq-item { margin-bottom: 1rem; }
+    .faq-item button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #00bfff;
+    }
+    .faq-item p {
+      margin: 0.5rem 0 0 0.5rem;
+      color: #ccc;
+      font-size: 0.95rem;
+      display: none;
+    }
+    /* Divider (Linha Azul Separadora) */
+    .divider {
+      border: none;
+      height: 2px;
+      background: #00bfff;
+      margin: 0;
+    }
+    /* Footer */
+    footer {
+      background-color: #0a0f2c;
+      color: #aaa;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+    body.light-mode footer { background-color: #e0e0e0; color: #555; }
+    footer .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer-left, .footer-center, .footer-right { flex: 1; }
+    .footer-left { text-align: left; font-size: 0.9rem; }
+    .footer-center { text-align: center; }
+    .footer-center h3 { margin-bottom: 0.5rem; color: #00bfff; font-size: 1rem; }
+    .footer-center ul { list-style: none; padding: 0; margin: 0; }
+    .footer-center ul li { display: inline-block; margin: 0 0.5rem; }
+    .footer-center ul li a { color: #00bfff; text-decoration: none; font-size: 0.9rem; }
+    .footer-right { text-align: right; }
+    .footer-right h3 {
+      margin: 0;
+      padding-bottom: 0.25rem;
+      text-align: right;
+      color: #00bfff;
+      font-size: 1rem;
+    }
+    .footer-right ul { margin: 0; padding: 0; text-align: right; }
+    .footer-right ul li { display: inline-block; margin: 0 0.3rem; }
+    .footer-right ul li a {
+      color: #00bfff;
+      font-size: 1.3rem;
+      text-decoration: none;
+    }
+    /* Animação fadeInUp */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    /* Scroll Reveal */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(80px);
+      transition: all 0.8s ease;
+    }
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <button id="btnTop" title="Voltar ao Topo">↑</button>
+    <a href="principal.html" class="logo">+DIGITAL</a>
+    <nav>
+      <ul>
+        <li><a href="quemsomos.html">Quem Somos</a></li>
+        <li><a href="projeto.html">O Projeto</a></li>
+        <li><a href="casos.html">Casos Entregues</a></li>
+        <li><a href="contato.html" class="active">Contato</a></li>
+      </ul>
+    </nav>
+    <button class="toggle-theme" onclick="toggleTheme()">🌙</button>
+    <div class="menu-toggle">
+      <div></div><div></div><div></div>
+    </div>
+  </header>
+  
+  <!-- Hero Section - Contato -->
+  <section class="hero-contato">
+    <div>
+      <h1>Conecte-se e Transforme</h1>
+      <p>Nossa equipe está pronta para impulsionar seu sucesso digital.</p>
+    </div>
+  </section>
+  
+  <!-- Conteúdo da Página -->
+  <section class="conteudo">
+    <!-- Introdução Amigável -->
+    <div class="scroll-reveal intro-contato">
+      <h1>Entre em Contato</h1>
+      <p>Queremos ouvir você! Conte-nos sobre seu projeto e descubra como a +DIGITAL pode transformar seus desafios em oportunidades com soluções inovadoras.</p>
+    </div>
+    
+    <!-- Formulário de Contato -->
+    <form class="scroll-reveal formulario-contato">
+      <h2>Envie sua Mensagem</h2>
+      <input type="text" name="nome" placeholder="Seu Nome" required>
+      <input type="email" name="email" placeholder="Seu E-mail" required>
+      <input type="tel" name="telefone" placeholder="Seu Telefone">
+      <textarea name="mensagem" placeholder="Sua Mensagem" required></textarea>
+      <button type="submit">Enviar</button>
+    </form>
+    
+    <!-- Informações de Contato Diretas -->
+    <div class="scroll-reveal info-contato">
+      <h2>Informações de Contato</h2>
+      <ul>
+        <li><strong>E-mail:</strong> <a href="mailto:maisdigitalcomvoce@gmail.com" style="color:#00bfff;">maisdigitalcomvoce@gmail.com</a></li>
+        <li><strong>Telefone:</strong> +(55) 11 99999-9999</li>
+        <li><strong>Endereço:</strong> Rua Exemplo, 123, Bairro Modelo, Cidade - UF</li>
+      </ul>
+    </div>
+    
+    <!-- Horário de Atendimento -->
+    <div class="scroll-reveal horario-atendimento">
+      <h2>Horário de Atendimento</h2>
+      <p>Segunda à Sexta, das 9h às 18h</p>
+    </div>
+    
+    <!-- Redes Sociais -->
+    <div class="scroll-reveal info-contato">
+      <h2>Redes Sociais</h2>
+      <ul style="display:flex;justify-content:center;gap:1rem;">
+        <li><a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+        <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+        <li><a href="https://wa.me/1234567890" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+      </ul>
+    </div>
+    
+    <!-- Mapa de Localização -->
+    <div class="scroll-reveal mapa-localizacao">
+      <h2>Localização</h2>
+      <!-- Substitua o embed abaixo pelo mapa do seu endereço real -->
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.2361496198056!2d-46.67127608450401!3d-23.58535068467345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59b4e411abe1%3A0xab1b2c3d4e5f6a78!2sExemplo%20de%20Endere%C3%A7o!5e0!3m2!1spt-BR!2sbr!4v1680000000000" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    
+    <!-- FAQ - Perguntas Frequentes -->
+    <div class="scroll-reveal faq">
+      <h2>Perguntas Frequentes</h2>
+      <div class="faq-item">
+        <button class="faq-question">Qual o prazo de resposta?</button>
+        <p class="faq-answer">Nossa equipe retorna sua mensagem em até 24 horas úteis.</p>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Quais informações devo enviar?</button>
+        <p class="faq-answer">Envie seu nome, telefone, e-mail e uma breve descrição da sua necessidade para um atendimento personalizado.</p>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Posso agendar uma consultoria?</button>
+        <p class="faq-answer">Sim! Entre em contato e agende sua consultoria sem compromisso.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Linha Separadora -->
+  <hr class="divider">
+  
+  <!-- Rodapé -->
+  <footer>
+    <div class="container">
+      <div class="footer-left">
+        &copy; 2025 +DIGITAL. Todos os direitos reservados.
+      </div>
+      <div class="footer-center">
+        <h3>Outras Páginas</h3>
+        <ul>
+          <li><a href="parceiro.html">Seja um Parceiro</a></li>
+          <li><a href="suporte.html">Central de Suporte</a></li>
+          <li><a href="contato.html">Contato</a></li>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">
+        <h3>Redes Sociais</h3>
+        <ul>
+          <li><a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
+          <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+          <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+          <li><a href="https://wa.me/1234567890" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- JavaScript -->
+  <script>
+    // Botão voltar ao topo
+    const btnTop = document.getElementById("btnTop");
+    window.onscroll = function() {
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        btnTop.style.display = "block";
+      } else {
+        btnTop.style.display = "none";
+      }
+    };
+    btnTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    
+    // Toggle Modo Claro/Escuro
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+      const button = document.querySelector(".toggle-theme");
+      button.textContent = document.body.classList.contains("light-mode") ? "🌞" : "🌙";
+    }
+    
+    // Scroll Reveal Animation
+    document.addEventListener("DOMContentLoaded", function() {
+      const elements = document.querySelectorAll('.scroll-reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.2 });
+      elements.forEach(el => observer.observe(el));
+    });
+    
+    // FAQ - Acordeão
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', function() {
+        const faqItem = this.parentElement;
+        const answer = faqItem.querySelector('.faq-answer');
+        answer.style.display = (answer.style.display === "block") ? "none" : "block";
+      });
+    });
+  </script>
+  
+  <!-- Firebase Integration (para gravar o formulário de contato) -->
+  <script type="module">
+    // Importe os módulos necessários da Firebase SDK
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    
+    // Substitua os valores abaixo pelas suas credenciais do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBq7Cjcokq2NGhnRQGd7UPt0fWiVC7BPCk",
+      authDomain: "maisdigital-8f1c8.firebaseapp.com",
+      projectId: "maisdigital-8f1c8",
+      storageBucket: "maisdigital-8f1c8.firebasestorage.app",
+      messagingSenderId: "469298221310",
+      appId: "1:469298221310:web:5b71adb2128561a60e55af"
+    };
+    
+    // Inicializa o Firebase
+    const appFirebase = initializeApp(firebaseConfig);
+    const db = getFirestore(appFirebase);
+    
+    // Seleciona o formulário de contato
+    const form = document.querySelector('.formulario-contato');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nome = form.nome.value;
+      const email = form.email.value;
+      const telefone = form.telefone.value;
+      const mensagem = form.mensagem.value;
+      
+      try {
+        await addDoc(collection(db, "contatos"), {
+          nome,
+          email,
+          telefone,
+          mensagem,
+          timestamp: new Date()
+        });
+        alert("Sua mensagem foi enviada com sucesso!");
+        form.reset();
+      } catch (error) {
+        console.error("Erro ao enviar a mensagem: ", error);
+        alert("Ocorreu um erro. Tente novamente.");
+      }
+    });
+  </script>
+</body>
+</html>

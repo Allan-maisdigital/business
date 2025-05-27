@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>+DIGITAL</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+        /* Container geral do widget (posição fixa no canto inferior direito) */
+    .chat-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      z-index: 1000;
+      font-family: Arial, sans-serif;
+    }
+    
+    /* Avatar da Assistente */
+    .chat-avatar {
+      flex-shrink: 0;
+      cursor: pointer;
+      position: relative;
+    }
+    .chat-avatar img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    /* Caixinha da mensagem */
+    .chat-message-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin-left: 10px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      max-width: 250px;
+    }
+    .chat-message-box p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+    }
+    .icon-plus {
+      display: inline-block;
+      background: #00bfff;
+      color: #fff;
+      font-weight: bold;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      border-radius: 50%;
+      margin-left: 8px;
+    }
+    
+    /* “Tail” da caixinha (estilo balão de fala) */
+    .chat-message-box::before {
+      content: "";
+      position: absolute;
+      left: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent #fff transparent transparent;
+    }
+    
+    /* Botão de fechar do widget */
+    .chat-close {
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      color: #333;
+      margin-left: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    
+    /* ======== Janela de Chat Expandida (opcional) ======== */
+    
+    .chat-window {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 320px;
+      max-height: 500px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      font-family: Arial, sans-serif;
+    }
+    
+    .chat-window-header {
+      background: #00bfff;
+      color: #fff;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    
+    .chat-window-header h2 {
+      flex: 1;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    
+    .chat-window-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+    
+    .chat-window-close {
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      color: #fff;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    
+    .chat-window-body {
+      padding: 10px;
+      flex: 1;
+      overflow-y: auto;
+      background-color: #0a0f2c; /* Azul escuro */
+      color: #fff;              /* Texto branco */
+    }
+    .message {
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+    }
+    .user-message {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+.ia-message {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+    .chat-window-footer {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    
+    .chat-input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    
+    .chat-send-button {
+      background: #00bfff;
+      border: none;
+      padding: 0 15px;
+      font-size: 0.95rem;
+      color: #fff;
+      cursor: pointer;
+    }
+    /* --- Estilos PARA a seção "Por que a +DIGITAL é sua melhor opção?" --- */
+
+/* Container geral dos cards */
+section.melhores-opcoes {
+  padding: 5rem 2rem;
+  text-align: center;
+  background-color: #101840;
+}
+
+section.melhores-opcoes h2 {
+  font-size: 2.5rem;
+  color: #00bfff;
+  margin-bottom: 2rem;
+}
+
+.opcoes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Cada card */
+.opcao-card {
+  position: relative;
+  width: 300px;    /* Pode ajustar conforme necessário */
+  height: 350px;   /* Pode ajustar conforme necessário */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Imagem de fundo */
+.card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3; /* Essa opacidade se aplica sempre, seja antes ou depois do overlay */
+  z-index: 1;
+}
+
+/* Camada fixa – ícone e título (visualização normal) */
+.card-fixed {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none; /* Para que o mouse interaja com o card, não com essa camada */
+}
+
+.fixed-icon {
+  position: absolute;
+  top: 10px;    /* Ajuste conforme desejado */
+  left: 10px;
+}
+
+.fixed-icon i {
+  font-size: 2.5rem;
+  color: #00bfff;
+}
+
+.fixed-title {
+  position: absolute;
+  bottom: 10px;  /* Ajuste conforme desejado */
+  left: 10px;
+}
+
+.fixed-title h3 {
+  font-size: 1.5rem;
+  color: white;
+  margin: 0;
+}
+
+/* Overlay – inicialmente fora de vista, desliza para cima no hover */
+.overlay {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  bottom: -100%;  /* Inicia fora de vista */
+  background: rgba(10,15,44,0.5); /* Fundo semi-transparente para escurecer a imagem */
+  z-index: 3;
+  transition: bottom 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Quando o card estiver em hover, o overlay sobe e fica visível */
+.opcao-card:hover .overlay {
+  bottom: 0;
+  opacity: 1;
+}
+
+/* No hover, para evitar duplicidade, ocultamos a camada fixa do título */
+.opcao-card:hover .fixed-title {
+  display: none;
+}
+
+/* Overlay – título e texto */
+.overlay-title h3 {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.overlay p {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.3;
+  margin: 0;
+}
+
+    /* Global Reset e Configurações Gerais */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+    html, body {
+      overflow-x: hidden;
+    }
+    body {
+      background-color: #0a0f2c;
+      color: white;
+      scroll-behavior: smooth;
+    }
+    /* Modo Claro */
+    body.light-mode {
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    /* Header e Menu */
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(10,15,44,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+    }
+    body.light-mode header {
+      background: rgba(255,255,255,0.9);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00bfff;
+      text-decoration: none;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    body.light-mode nav ul li a {
+      color: #333;
+    }
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #00bfff;
+      left: 0;
+      bottom: -4px;
+      transition: width 0.3s;
+    }
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    /* Dropdown (Submenu) para "Soluções" */
+    nav ul li.submenu {
+      position: relative;
+    }
+    nav ul li.submenu ul.dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #0a0f2c;
+      padding: 0.5rem 0;
+      list-style: none;
+      min-width: 200px;
+      z-index: 1000;
+    }
+    nav ul li.submenu:hover ul.dropdown {
+      display: block;
+    }
+    nav ul li.submenu ul.dropdown li {
+      padding: 0.5rem 1rem;
+    }
+    nav ul li.submenu ul.dropdown li a {
+      font-size: 0.9rem;
+      color: white;
+      text-decoration: none;
+    }
+    nav ul li.submenu ul.dropdown li a:hover {
+      color: #00bfff;
+    }
+    /* Botão Especial "Quero Começar" */
+    nav ul li a.cta {
+      display: inline-block;  /* Força o elemento a agir como um bloco inline */
+      background-color: #00bfff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    nav ul li a.cta:hover {
+      background-color: #0090c0;
+      transform: scale(1.10);
+    }
+    nav ul li a.cta::after {
+  display: none;
+}
+
+    /* Toggle Theme Button */
+    .toggle-theme {
+      background: none;
+      border: 2px solid #00bfff;
+      color: #00bfff;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s, color 0.3s;
+    }
+    .toggle-theme:hover {
+      background-color: #00bfff;
+      color: #0a0f2c;
+    }
+    body.light-mode .toggle-theme {
+      border-color: #007acc;
+      color: #007acc;
+    }
+    body.light-mode .toggle-theme:hover {
+      background-color: #007acc;
+      color: white;
+    }
+    /* Mobile Menu Toggle */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 4px 0;
+    }
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #0a0f2c;
+        width: 200px;
+        padding: 1rem;
+      }
+      nav ul.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
+    /* Hero Section */
+    section.hero {
+      height: 100vh;
+      background: linear-gradient(rgba(10,15,44,0.7), rgba(10,15,44,0.7)), url('imagens/home.avif') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      background: linear-gradient(to right, #00bfff, #6a5acd);
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .hero p {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #eee;
+      animation: fadeInUp 1.5s ease forwards;
+    }
+    .btn {
+      margin-top: 2rem;
+      background: #00bfff;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #0090c0;
+    }
+    /* Section Cards (Flip Cards) */
+    section.cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 5rem 2rem;
+      gap: 2rem;
+      background-color: #0a0f2c;
+    }
+    .flip-card {
+      background-color: transparent;
+      width: 300px;
+      height: 350px;
+      perspective: 1000px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .flip-card-front {
+      background-color: #1c1f3c;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .flip-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .flip-card-back {
+      background-color: #292e5d;
+      color: white;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .btn-flip {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .btn-flip:hover {
+      background-color: #0056b3;
+    }
+    /* Overlay para Flip Cards */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10,15,44,0.7);
+      color: #00bfff;
+      font-size: 1.5rem;
+      text-align: center;
+      padding: 1rem;
+      opacity: 1;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .overlay i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .overlay h3 {
+      font-weight: bold;
+    }
+    .flip-card-front:hover .overlay {
+      opacity: 0;
+    }
+    /* Seção: Por que a +DIGITAL é sua melhor opção */
+    section.melhores-opcoes {
+      padding: 5rem 2rem;
+      text-align: center;
+      background-color: #101840;
+    }
+    .melhores-opcoes h2 {
+      font-size: 2.5rem;
+      color: #00bfff;
+      margin-bottom: 2rem;
+    }
+    .opcoes-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .opcao-card {
+      position: relative;
+      background: #1c1f3c;
+      border-radius: 12px;
+      width: 280px;
+      height: 200px;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .opcao-card:hover {
+      transform: scale(1.05);
+    }
+    .card-base {
+      position: relative;
+      z-index: 1;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: opacity 0.4s ease;
+    }
+    .opcao-card:hover .card-base {
+      opacity: 0;
+    }
+    .base-top {
+      text-align: left;
+    }
+    .base-top i {
+      font-size: 2rem;
+      color: #00bfff;
+    }
+    .base-bottom {
+      text-align: left;
+    }
+    .base-bottom h3 {
+      color: #fff;
+      margin: 0.5rem 0 0;
+    }
+    .card-overlay {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10,15,44,0.8);
+      transition: bottom 0.4s ease;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .opcao-card:hover .card-overlay {
+      bottom: 0;
+    }
+    .overlay-top {
+      text-align: left;
+    }
+    .overlay-top i {
+      font-size: 2rem;
+      color: #00bfff;
+    }
+    .overlay-bottom {
+      text-align: left;
+    }
+    .overlay-bottom h3 {
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .overlay-bottom p {
+      color: #ccc;
+      font-size: 0.95rem;
+    }
+    /* Seção: Nossos Planos */
+    section.planos {
+      background: #0a0f2c;
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+    .planos h2 {
+      font-size: 2.5rem;
+      color: #00bfff;
+      margin-bottom: 2rem;
+    }
+    .planos-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .plano-card {
+      background-color: #1c1f3c;
+      padding: 2rem;
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .plano-card h3 {
+      color: #00bfff;
+      margin-bottom: 1rem;
+    }
+    .plano-card p {
+      color: #ccc;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .plano-card a {
+      display: inline-block;
+      background-color: #00bfff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .plano-card a:hover {
+      background-color: #0090c0;
+    }
+    
+    /* Nova Seção: Experimente Nosso Assistente de IA */
+    .chatbot-intro {
+      background: #101840;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .chatbot-intro .container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .chatbot-intro .chat-intro-content {
+      flex: 1 1 400px;
+      animation: fadeInLeft 1s;
+    }
+    .chatbot-intro .chat-intro-content h2 {
+      color: #00bfff;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .chatbot-intro .chat-intro-content p {
+      margin-top: 1rem;
+      color: #ccc;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .chatbot-intro .chat-intro-content .btn {
+      margin-top: 5rem !important;
+      background: #00bfff;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .chatbot-intro .chat-intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* se quiser centralizado; caso deseje alinhamento à esquerda, use flex-start */
+}
+
+    .chatbot-intro .chat-intro-content .btn:hover {
+      background: #0090c0;
+    }
+    .chatbot-intro .chat-intro-image {
+      flex: 1 1 300px;
+      animation: fadeInRight 1s;
+    }
+    .chatbot-intro .chat-intro-image img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    /* Seção: Perguntas Frequentes (FAQ) */
+    section.faq {
+      padding: 5rem 2rem;
+      background-color: #0a0f2c;
+      text-align: center;
+    }
+    section.faq h2 {
+      font-size: 2.5rem;
+      color: #00bfff;
+      margin-bottom: 2rem;
+    }
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .faq-item {
+      border-bottom: 1px solid #00bfff;
+      padding: 1rem 0;
+    }
+    .faq-item:last-child {
+  border-bottom: none;
+}
+    .faq-question {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.1rem;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      padding: 1rem 0;
+      position: relative;
+    }
+    .faq-question::after {
+      content: '+';
+      position: absolute;
+      right: 0;
+      font-size: 1.5rem;
+      transition: transform 0.3s;
+    }
+    .faq-item.active .faq-question::after {
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      margin-top: 1rem;
+    }
+    .faq-answer p {
+      color: #ccc;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    /* Seção: Chamada Final (CTA) */
+    section.chamada-final {
+      background: #101840;
+      padding: 4rem 2rem;
+      text-align: center;
+      color: white;
+      box-shadow: 0 10px 15px -10px rgba(0,191,255,0.5);
+    }
+    .chamada-final h2 {
+      font-size: 2.2rem;
+      color: #00bfff;
+      margin-bottom: 1rem;
+    }
+    .chamada-final p {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+    .chamada-final a {
+      background: #00bfff;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .chamada-final a:hover {
+      background: #0090c0;
+    }
+    /* Linha Separadora entre CTA e Footer */
+    .divider {
+      border: none;
+      height: 2px;
+      background: #00bfff;
+      margin: 0;
+    }
+    /* Footer */
+footer {
+      background-color: #0a0f2c;
+      color: #aaa;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+    body.light-mode footer {
+      background-color: #e0e0e0;
+      color: #555;
+    }
+    footer .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer-left, .footer-center, .footer-right {
+      flex: 1;
+    }
+    .footer-left {
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .footer-center {
+      text-align: center;
+    }
+    .footer-center h3 {
+      margin-bottom: 0.5rem;
+      color: #00bfff;
+      font-size: 1rem;
+    }
+    .footer-center ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-center ul li {
+      display: inline-block;
+      margin: 0 0.5rem;
+    }
+    .footer-center ul li a {
+      color: #00bfff;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .footer-right {
+      text-align: right;
+    }
+    .footer-right h3 {
+      margin: 0;
+      padding-bottom: 0.25rem;
+      text-align: right;
+      color: #00bfff;
+      font-size: 1rem;
+    }
+    .footer-right ul {
+      margin: 0;
+      padding: 0;
+      text-align: right;
+    }
+    .footer-right ul li {
+      display: inline-block;
+      margin: 0 0.3rem;
+    }
+    .footer-right ul li a {
+      color: #00bfff;
+      font-size: 1.3rem;
+      text-decoration: none;
+    }
+    /* Botão Back-to-Top */
+    #btnTop {
+      display: none;
+      position: fixed;
+      bottom: -200px;
+      right: 30px;
+      z-index: 99;
+      font-size: 24px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease;
+    }
+    #btnTop:hover {
+      background-color: #0056b3;
+    }
+    /* Animações */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width:768px) {
+      nav ul {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+    }
+/* Para os cards da seção "Nossos Planos" */
+
+/* Estado inicial: os cards começam "fora da vista" (traduzidos para a esquerda) e transparentes */
+.plano-card {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Quando o card ganha a classe "visible", ele volta para o estado normal */
+.plano-card.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Efeito de hover: quando o usuário passa o mouse, o card faz um zoom e muda a cor de fundo */
+.plano-card:hover {
+  transform: scale(1.05);
+  background-color: #232b4d;  /* Cor no hover */
+}
+/* Classe para animar os títulos */
+.animate-title {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Quando a classe 'visible' for adicionada, o título ficará visível e na posição final */
+.animate-title.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Estado inicial para os itens de FAQ */
+.faq-item.animate-faq {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Estado final: quando a classe "visible" for adicionada */
+.faq-item.animate-faq.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Reinicia o contador para os itens de FAQ */
+.faq-container {
+  counter-reset: faq-number;
+}
+
+/* Aplica o pseudo-elemento apenas ao botão da pergunta */
+.faq-question::before {
+  content: counter(faq-number) ". ";
+  counter-increment: faq-number;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00bfff;
+  margin-right: 8px;
+}
+/* ======================== */
+/* Modo Claro – Customizações Hard-coded */
+/* Certifique-se de colocar este bloco no final do seu CSS */
+/* ======================== */
+
+/* Global */
+body.light-mode {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Header e Navegação */
+body.light-mode header {
+  background: rgba(255, 255, 255, 0.9);
+}
+body.light-mode nav ul li a {
+  color: #333;
+}
+body.light-mode nav ul li a::after {
+  background: #007acc;
+}
+
+/* Hero Section */
+body.light-mode section.hero {
+  background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)),
+              url('imagens/home.avif') no-repeat center center/cover;
+}
+body.light-mode .hero p {
+  color: #333;
+}
+
+/* Flip Cards e Seção de Cards (Flip Cards) */
+body.light-mode section.cards {
+  background-color: #ffffff; /* Fundo da seção dos flip cards fica branco */
+}
+body.light-mode .flip-card-front {
+  background-color: #e0e0e0; /* Flip card frontal adota um fundo claro */
+  color: #333 !important;
+}
+body.light-mode .flip-card-back {
+  background-color: #e0e0e0; /* Flip card traseiro também em tom claro */
+  color: #333 !important;
+}
+body.light-mode .flip-card-front .overlay {
+  background: rgba(240, 240, 240, 0.8);
+  color: #007acc;
+}
+
+/* Seção: Por que a +DIGITAL é sua melhor opção? */
+body.light-mode .melhores-opcoes {
+  background-color: #e0e0e0;
+  color: #000 !important;  /* Força o texto da seção a ficar preto */
+}
+body.light-mode .melhores-opcoes h2 {
+  color: #000 !important;
+}
+
+/* Ajuste dos Cards de "Por que a +DIGITAL é sua melhor opção?" */
+body.light-mode .opcao-card {
+  background: #e0e0e0;  /* Substitui o fundo azul escuro pelo tom claro */
+}
+body.light-mode .card-base {
+  color: #000 !important;  /* Garante que o texto interno fique preto */
+}
+body.light-mode .opcao-card h3 {
+  color: #000 !important;  /* Títulos dos cards ficarão pretos */
+}
+/* Ajuste do overlay dos cards nessa seção */
+body.light-mode .card-overlay {
+  background: rgba(200, 200, 200, 0.8);
+}
+body.light-mode .card-overlay,
+body.light-mode .card-overlay * {
+  color: #000 !important;
+}
+
+/* Seção: Nossos Planos */
+body.light-mode section.planos {
+  background-color: #f4f4f4;
+}
+body.light-mode .plano-card {
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+body.light-mode .plano-card h3 {
+  color: #000 !important;
+}
+body.light-mode .plano-card p {
+  color: #555;
+}
+body.light-mode .plano-card a {
+  background-color: #007acc;
+  color: white;
+}
+body.light-mode .plano-card a:hover {
+  background-color: #005f99;
+}
+
+/* Seção: Experimente Nosso Assistente de IA */
+body.light-mode .chatbot-intro {
+  background-color: #e0e0e0;
+  color: #333;
+}
+body.light-mode .chatbot-intro .chat-intro-content h2 {
+  color: #000 !important;
+}
+body.light-mode .chatbot-intro .chat-intro-content p {
+  color: #555;
+}
+
+/* Seção: Perguntas Frequentes (FAQ) */
+body.light-mode section.faq {
+  background-color: #f4f4f4;
+  color: #333;
+}
+body.light-mode section.faq h2 {
+  color: #000 !important;
+}
+body.light-mode .faq-question {
+  color: #333;
+  border-bottom: 1px solid #007acc;
+}
+body.light-mode .faq-question::after {
+  color: #007acc;
+}
+body.light-mode .faq-answer p {
+  color: #555;
+}
+
+/* Seção: Chamada Final (CTA) */
+body.light-mode section.chamada-final {
+  background-color: #e0e0e0;
+  color: #333;
+}
+body.light-mode .chamada-final h2 {
+  color: #000 !important;
+}
+body.light-mode .chamada-final a {
+  background-color: #007acc;
+  color: white;
+}
+body.light-mode .chamada-final a:hover {
+  background-color: #005f99;
+}
+
+/* Footer */
+body.light-mode footer {
+  background-color: #f4f4f4;
+  color: #555;
+}
+body.light-mode .footer-left {
+  color: #555;
+}
+body.light-mode .footer-center h3 {
+  color: #000 !important;
+}
+body.light-mode .footer-center ul li a {
+  color: #000 !important;
+}
+body.light-mode .footer-right h3 {
+  color: #000 !important;
+}
+body.light-mode .footer-right ul li a {
+  color: #000 !important;
+}
+
+/* Atualização Global: Força títulos e ícones a ficarem pretos */
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode i {
+  color: #000 !important;
+}
+
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Toggle Mobile Menu
+      const menuToggle = document.querySelector('.menu-toggle');
+      const nav = document.querySelector('nav ul');
+      menuToggle.addEventListener('click', () => {
+        nav.classList.toggle('active');
+      });
+    });
+  </script>
+</head>
+<body>
+  <!-- Widget de Chat Flutuante -->
+  <div class="chat-widget" id="chatWidget">
+    <!-- Avatar da Assistente -->
+    <div class="chat-avatar" onclick="openChatWindow()">
+      <img src="imagens/imagem-assistente.png" alt="+DIGITAL Assistente">
+    </div>
+    
+    <!-- Caixinha com a mensagem -->
+    <div class="chat-message-box" onclick="openChatWindow()">
+      <p>Olá! Como podemos te ajudar hoje? <span class="icon-plus">+</span></p>
+    </div>
+    
+    <!-- Botão de fechar o widget -->
+    <button class="chat-close" onclick="closeChatWidget(event)">×</button>
+  </div>
+  
+  <!-- Janela de Chat Expandida (inicialmente oculta) -->
+  <div class="chat-window" id="chatWindow" style="display: none;">
+    <div class="chat-window-header">
+      <img src="imagens/imagem-assistente.png" alt="+DIGITAL Assistente" class="chat-window-avatar">
+      <h2>+DIGITAL Assistente</h2>
+      <button class="chat-window-close" onclick="closeChatWindow()">×</button>
+    </div>
+    <div class="chat-window-body">
+      <div class="chat-messages">
+        <p class="chat-message">Bem-vindo à +DIGITAL! Em que posso ajudar?</p>
+      </div>
+    </div>
+    <div class="chat-window-footer">
+      <input type="text" placeholder="Digite sua mensagem..." class="chat-input">
+      <button class="chat-send-button">Enviar</button>
+    </div>
+  </div>
+  <!-- Header -->
+  <header>
+    <button id="btnTop" title="Voltar ao Topo">↑</button>
+    <a href="principal.html" class="logo">+DIGITAL</a>
+    <nav>
+      <ul>
+        <li><a href="quemsomos.html">Quem Somos</a></li>
+        <li class="submenu">
+          <a href="#">Soluções</a>
+          <ul class="dropdown">
+            <li><a href="sites.html">Sites e Landing Pages</a></li>
+            <li><a href="estrategia.html">Estratégia Digital</a></li>
+            <li><a href="seo.html">Otimização &amp; SEO</a></li>
+            <li><a href="identidade.html">Identidade Visual</a></li>
+          </ul>
+        </li>
+        <li><a href="planos.html">Planos</a></li>
+        <li><a href="historias.html">Histórias de Sucesso</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="quero-comecar.html" class="cta">Quero Começar</a></li>
+      </ul>
+    </nav>
+    <button class="toggle-theme" onclick="toggleTheme()">🌙</button>
+    <div class="menu-toggle">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div>
+      <h1>Transformando Negócios com Tecnologia</h1>
+      <p>Simplificamos a jornada digital de pequenos negócios com soluções sob medida e impacto real.</p>
+      <a href="#quemsomos"><button class="btn">Saiba mais</button></a>
+    </div>
+  </section>
+  
+  <!-- Cards Section (Flip Cards) -->
+  <section id="cards" class="cards">
+    <div class="flip-card" id="quemsomos">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="imagens/quem-somos.jpg" alt="quem-somos" />
+          <div class="overlay">
+            <i class="fas fa-users"></i>
+            <h3>Quem Somos</h3>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <h2>Quem Somos</h2>
+          <p>Coletivo voluntário apaixonado por tecnologia e transformação digital. Ajudamos pequenos negócios com soluções acessíveis.</p>
+          <a href="quemsomos.html" class="btn-flip">Saiba mais</a>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" id="projeto">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="imagens/o-projeto.jpg" alt="o-projeto" />
+          <div class="overlay">
+            <i class="fas fa-lightbulb"></i>
+            <h3>O Projeto</h3>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <h2>O Projeto +DIGITAL</h2>
+          <p>Desenvolvemos soluções como PowerApps, treinamentos e conteúdos práticos para impulsionar negócios de forma leve e ágil.</p>
+          <a href="projeto.html" class="btn-flip">Saiba mais</a>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" id="casos">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="imagens/casos-entregues.jpg" alt="casos-entregues" />
+          <div class="overlay">
+            <i class="fas fa-check-circle"></i>
+            <h3>Casos Entregues</h3>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <h2>Casos Entregues</h2>
+          <p>Projetos desenvolvidos como automações em PowerApps, simplificações de processos e dashboards de performance.</p>
+          <div class="counter" id="counter-casos">0</div>
+          <a href="casos.html" class="btn-flip">Saiba mais</a>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" id="contato">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="imagens/contato.jpg" alt="contato" />
+          <div class="overlay">
+            <i class="fas fa-envelope"></i>
+            <h3>Contato</h3>
+          </div>
+        </div>
+        <div class="flip-card-back">
+          <h2>Contato</h2>
+          <p>Escreva para <a href="mailto:maisdigitalcomvoce@gmail.com" class="email-link">maisdigitalcomvoce@gmail.com</a> ou siga a gente nas redes para participar do projeto ou colaborar.</p>
+          <a href="contato.html" class="btn-flip">Saiba mais</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Seção: Por que a +DIGITAL é sua melhor opção -->
+  <section class="melhores-opcoes">
+    <h2 class="animate-title">Por que a +DIGITAL é a sua melhor opção?</h2>
+    <div class="opcoes-grid">
+      <!-- Card 1 -->
+      <div class="opcao-card">
+          <img class="card-img" src="imagens/atendimento-humanizado.png" alt="atendimento-humanizado">
+        <div class="card-base">
+          <div class="base-top">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <div class="base-bottom">
+            <h3>Atendimento Humano</h3>
+          </div>
+        </div>
+        <div class="card-overlay">
+          <div class="overlay-top">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <div class="overlay-bottom">
+            <h3>Atendimento Humano</h3>
+            <p>Cuidamos de cada projeto como se fosse único, com escuta e empatia.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="opcao-card">
+        <img class="card-img" src="imagens/soluções-enxutas.png" alt="soluções-enxutas">
+        <div class="card-base">
+          <div class="base-top">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <div class="base-bottom">
+            <h3>Soluções Enxutas</h3>
+          </div>
+        </div>
+        <div class="card-overlay">
+          <div class="overlay-top">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <div class="overlay-bottom">
+            <h3>Soluções Enxutas</h3>
+            <p>Foco no que realmente importa, sem desperdícios e com agilidade.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="opcao-card">
+        <img class="card-img" src="imagens/resultados-visíveis.png" alt="resultados-visíveis">
+        <div class="card-base">
+          <div class="base-top">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="base-bottom">
+            <h3>Resultados Visíveis</h3>
+          </div>
+        </div>
+        <div class="card-overlay">
+          <div class="overlay-top">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="overlay-bottom">
+            <h3>Resultados Visíveis</h3>
+            <p>Nosso trabalho é voltado para gerar impacto prático no seu negócio.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="opcao-card">
+        <img class="card-img" src="imagens/tecnologia-autonomia.png" alt="tecnologia-autonomia">
+        <div class="card-base">
+          <div class="base-top">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="base-bottom">
+            <h3>Educação &amp; Autonomia</h3>
+          </div>
+        </div>
+        <div class="card-overlay">
+          <div class="overlay-top">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="overlay-bottom">
+            <h3>Educação &amp; Autonomia</h3>
+            <p>Entregamos ferramentas e ensinamos você a usá-las.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Card 5 -->
+      <div class="opcao-card">
+        <img class="card-img" src="imagens/preço-justo.png" alt="preço-justo">
+        <div class="card-base">
+          <div class="base-top">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="base-bottom">
+            <h3>Preço Justo</h3>
+          </div>
+        </div>
+        <div class="card-overlay">
+          <div class="overlay-top">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="overlay-bottom">
+            <h3>Preço Justo</h3>
+            <p>Planos acessíveis para realidades diferentes. Cabe no seu bolso.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Card 6 -->
+      <div class="opcao-card">
+        <img class="card-img" src="imagens/conexão-cliente.png" alt="conexão-cliente">
+        <div class="card-base">
+          <div class="base-top">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="base-bottom">
+            <h3>Conexão com o Cliente</h3>
+          </div>
+        </div>
+        <div class="card-overlay">
+          <div class="overlay-top">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="overlay-bottom">
+            <h3>Conexão com o Cliente</h3>
+            <p>Construção conjunta e proximidade durante toda a jornada.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Seção: Nossos Planos -->
+  <section class="planos">
+    <h2 class="animate-title">Nossos Planos</h2>
+    <div class="planos-grid">
+      <div class="plano-card">
+        <h3>Grátis</h3>
+        <p>Presença digital básica para começar a explorar o digital.</p>
+        <a href="planos.html">Ver detalhes</a>
+      </div>
+      <div class="plano-card">
+        <h3>Essencial</h3>
+        <p>Plano ideal para quem precisa de estrutura profissional básica.</p>
+        <a href="planos.html">Ver detalhes</a>
+      </div>
+      <div class="plano-card">
+        <h3>Profissional</h3>
+        <p>Para quem busca performance, SEO e presença estratégica.</p>
+        <a href="planos.html">Ver detalhes</a>
+      </div>
+      <div class="plano-card">
+        <h3>Personalizado</h3>
+        <p>Desenvolvimento sob medida com foco total no seu objetivo.</p>
+        <a href="planos.html">Ver detalhes</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Nova Seção: Experimente Nosso Assistente de IA -->
+  <section class="chatbot-intro">
+    <div class="container">
+      <div class="chat-intro-content">
+        <h2 class="animate-title">Experimente Nosso Assistente de IA</h2>
+        <p>
+          Descubra como é fácil criar seu site com a inteligência artificial da +DIGITAL.<br>
+          Nossa ferramenta interativa te guiará de forma rápida e prática na montagem do seu site – sem complicação!
+        </p>
+        <a href="chatbot.html" class="btn">Acessar ChatBot</a>
+      </div>
+      <div class="chat-intro-image">
+        <img src="imagens/imagem-assistente.png" alt="Interaja com nossa IA" />
+      </div>
+    </div>
+  </section>
+  
+  <!-- Seção: Perguntas Frequentes (FAQ) -->
+  <section class="faq">
+    <h2 class="animate-title">Perguntas Frequentes</h2>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-item animate-faq">
+        <button class="faq-question">O que é a +DIGITAL?</button>
+        <div class="faq-answer">
+          <p>A +DIGITAL é uma plataforma de soluções digitais voltada para ajudar pequenos negócios a terem uma presença online impactante, oferecendo serviços personalizados como sites, landing pages, estratégias digitais, SEO e identidade visual.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-item animate-faq">
+        <button class="faq-question">Como a +DIGITAL pode ajudar o meu negócio?</button>
+        <div class="faq-answer">
+          <p>Concentramos nossos esforços em transformar sua presença digital, aumentando visibilidade, atraindo mais clientes e impulsionando resultados com soluções simples e personalizadas.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-item animate-faq">
+        <button class="faq-question">Quais serviços a +DIGITAL oferece?</button>
+        <div class="faq-answer">
+          <p>Nossos serviços incluem sites e landing pages, estratégia digital, otimização &amp; SEO e identidade visual, todos desenvolvidos conforme as necessidades do seu negócio.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-item animate-faq">
+        <button class="faq-question">Como posso solicitar um orçamento?</button>
+        <div class="faq-answer">
+          <p>Basta clicar no botão "Quero Começar" ou entrar em contato via WhatsApp. Nossa equipe analisará suas necessidades para propor a solução ideal.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-item animate-faq">
+        <button class="faq-question">É possível personalizar os serviços da +DIGITAL?</button>
+        <div class="faq-answer">
+          <p>Sim, nossos serviços são totalmente personalizáveis. Trabalhamos em conjunto com cada cliente para desenvolver soluções que atendam perfeitamente às suas necessidades e objetivos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Seção: Chamada Final (CTA) -->
+  <section class="chamada-final">
+    <h2 class="animate-title">Solicite agora um orçamento sem compromisso</h2>
+    <p>Vamos entender sua necessidade e encontrar a solução ideal para o seu negócio.</p>
+    <a href="https://wa.me/5511999999999" target="_blank">Começar Agora</a>
+  </section>
+  
+  <!-- Linha Separadora entre CTA e Footer -->
+  <hr class="divider">
+  
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-left">
+        &copy; 2025 +DIGITAL. Todos os direitos reservados.
+      </div>
+      <div class="footer-center">
+        <h3>Outras Páginas</h3>
+        <ul>
+          <li><a href="parceiro.html">Seja um Parceiro</a></li>
+          <li><a href="suporte.html">Central de Suporte</a></li>
+          <li><a href="contato.html">Contato</a></li>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">
+        <h3>Redes Sociais</h3>
+        <ul>
+          <li><a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
+          <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+          <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+          <li><a href="https://wa.me/1234567890" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <!-- JavaScript -->
+  <script>
+    // Back-to-top Button
+    const btnTop = document.getElementById("btnTop");
+    window.onscroll = function() {
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        btnTop.style.display = "block";
+      } else {
+        btnTop.style.display = "none";
+      }
+    };
+    btnTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    // Função para alternar o Modo Claro/Escuro
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+      const button = document.querySelector(".toggle-theme");
+      button.textContent = document.body.classList.contains("light-mode") ? "🌞" : "🌙";
+    }
+    // Animação do Counter para "Casos Entregues"
+    function animateCounter(id, start, end, duration) {
+      let obj = document.getElementById(id);
+      let range = end - start;
+      let current = start;
+      let increment = end > start ? 1 : -1;
+      let stepTime = Math.abs(Math.floor(duration / range));
+      let timer = setInterval(() => {
+        current += increment;
+        obj.textContent = current;
+        if (current == end) {
+          clearInterval(timer);
+        }
+      }, stepTime);
+    }
+    document.querySelector('.flip-card#casos').addEventListener('mouseenter', () => {
+      animateCounter('counter-casos', 0, 125, 2000);
+    });
+    // FAQ Acordeão
+    document.querySelectorAll('.faq-question').forEach((button) => {
+      button.addEventListener('click', () => {
+        const faqItem = button.parentElement;
+        faqItem.classList.toggle('active');
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+  // Selecione todos os cards com a classe .plano-card (ajuste conforme sua classe)
+  const planoCards = document.querySelectorAll('.plano-card');
+  
+  const observerOptions = {
+    threshold: 0.3
+  };
+  
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Obtenha o índice do card para aplicar um delay escalonado
+        const index = Array.from(planoCards).indexOf(entry.target);
+        setTimeout(() => {
+          entry.target.classList.add("visible");
+        }, index * 200); // 200ms de delay entre cada card
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+  
+  planoCards.forEach(card => {
+    observer.observe(card);
+  });
+});
+document.addEventListener('DOMContentLoaded', () => {
+  // Selecione todos os elementos com a classe animate-title
+  const animatedTitles = document.querySelectorAll('.animate-title');
+  
+  const observerOptions = {
+    threshold: 0.3 // Quando 30% do elemento estiver visível, dispare a animação
+  };
+  
+  const titleObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // Para que a animação ocorra apenas uma vez
+      }
+    });
+  }, observerOptions);
+  
+  animatedTitles.forEach(title => {
+    titleObserver.observe(title);
+  });
+});
+document.addEventListener('DOMContentLoaded', () => {
+  // Selecione todos os itens de FAQ que possuem a classe "animate-faq"
+  const faqItems = document.querySelectorAll('.faq-item.animate-faq');
+  
+  const observerOptions = {
+    threshold: 0.3  // Quando 30% do item estiver visível, dispare a animação
+  };
+  
+  const faqObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        // Aplica um delay baseado no índice para que os itens animem um por vez
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, index * 300); // 300ms de delay entre cada item; ajuste se necessário
+        observer.unobserve(entry.target); // Para que a animação ocorra somente uma vez
+      }
+    });
+  }, observerOptions);
+  
+  faqItems.forEach(item => {
+    faqObserver.observe(item);
+  });
+});
+    // Abre a janela de chat e oculta o widget flutuante
+    function openChatWindow() {
+      // Evita o acionamento se o evento vier de um botão de fechar do widget
+      if (event.target.classList.contains('chat-close')) return;
+      document.getElementById('chatWidget').style.display = 'none';
+      document.getElementById('chatWindow').style.display = 'flex';
+    }
+    
+    // Fecha o widget flutuante (todo o componente)
+    function closeChatWidget(e) {
+      e.stopPropagation();
+      document.getElementById('chatWidget').style.display = 'none';
+    }
+    
+    // Fecha a janela de chat expandida e retorna o widget
+    function closeChatWindow() {
+      document.getElementById('chatWindow').style.display = 'none';
+      document.getElementById('chatWidget').style.display = 'flex';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+  // Seleciona o campo de entrada e o botão de enviar
+  const chatInput = document.querySelector('.chat-input');
+  const sendButton = document.querySelector('.chat-send-button');
+
+  // Quando o botão for clicado, chama a função para enviar a mensagem
+  sendButton.addEventListener('click', enviarMensagem);
+
+  // Quando o usuário apertar Enter no campo de mensagem, também envia
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Previne o comportamento padrão (como recarregar a página)
+      enviarMensagem();
+    }
+  });
+});
+
+// Função simples que processa e exibe a mensagem enviada (você pode expandir a lógica conforme necessário)
+async function enviarMensagem() {
+  const input = document.querySelector('.chat-input');
+  const mensagem = input.value.trim();
+  if (mensagem === "") return;
+
+  const chatMessages = document.querySelector('.chat-messages');
+  
+  // Exibe a mensagem do usuário na área de chat
+  chatMessages.innerHTML += `<div class="message user-message"><strong>Você:</strong> ${mensagem}</div>`;
+  input.value = '';
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // Define o prompt do sistema para dar contexto à IA
+  const systemPrompt = {
+    role: 'system',
+    content: 'Você é o assistente +D da +DIGITAL, fala em português e guia o usuário em perguntas para montar um site gratuito.'
+  };
+
+  try {
+    // Chamada à API da IA utilizando fetch
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer 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', // Substitua pela sua chave de API
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'deepseek/deepseek-r1:free',
+        messages: [systemPrompt, { role: 'user', content: mensagem }],
+        temperature: 0.7
+      })
+    });
+
+    const data = await response.json();
+    // Obtém a resposta da IA
+    const answer = data.choices?.[0]?.message?.content || 'Desculpe, ocorreu um erro.';
+    
+    // Exibe a resposta da IA na área de chat
+    chatMessages.innerHTML += `<div class="message ia-message"><strong>+D:</strong> ${answer}</div>`;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  } catch (error) {
+    console.error(error);
+    chatMessages.innerHTML += `<div><strong>+D:</strong> Ocorreu um erro ao processar sua mensagem.</div>`;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+}
+
+
+  </script>
+</body>
+</html>

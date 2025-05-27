@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatBot - +DIGITAL</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* GLOBAL RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      background-color: #0a0f2c;
+      color: white;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    body.light-mode {
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    /* Forçar textos escuros em modo diurno */
+    body.light-mode h1,
+    body.light-mode h2,
+    body.light-mode p,
+    body.light-mode a {
+      color: #333 !important;
+    }
+    
+    /* BOTÃO VOLTAR AO TOPO (fora do header) */
+    #btnTop {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 50;
+      font-size: 24px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease;
+    }
+    #btnTop:hover {
+      background-color: #0056b3;
+    }
+    
+    /* HEADER */
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(10,15,44,0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+    }
+    body.light-mode header {
+      background: rgba(255,255,255,0.9);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00bfff;
+      text-decoration: none;
+      position: relative;
+      z-index: 1000;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center; /* Força que os itens da lista também fiquem centralizados */
+      gap: 2rem;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    body.light-mode nav ul li a {
+      color: #333;
+    }
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #00bfff;
+      left: 0;
+      bottom: -4px;
+      transition: width 0.3s;
+    }
+    nav ul li a:hover::after,
+    nav ul li a.active::after {
+      width: 100%;
+    }
+    /* MENU ATUALIZADO: Itens da Página Home */
+    nav ul li a.cta {
+      display: inline-block;  /* Força o elemento a agir como um bloco inline */
+      background-color: #00bfff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    nav ul li a.cta:hover {
+      background-color: #0090c0;
+      transform: scale(1.10);
+    }
+    nav ul li a.cta::after {
+  display: none;
+}
+    
+    /* Toggle Modo Claro/Escuro */
+    .toggle-theme {
+      background: none;
+      border: 2px solid #00bfff;
+      color: #00bfff;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 1rem;
+      transition: background 0.3s, color 0.3s;
+    }
+    .toggle-theme:hover {
+      background-color: #00bfff;
+      color: #0a0f2c;
+    }
+    body.light-mode .toggle-theme {
+      border-color: #007acc;
+      color: #007acc;
+    }
+    body.light-mode .toggle-theme:hover {
+      background-color: #007acc;
+      color: white;
+    }
+    
+    /* Menu Mobile */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 4px 0;
+    }
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #0a0f2c;
+        width: 200px;
+        padding: 1rem;
+      }
+      nav ul.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
+    
+    /* HERO SECTION - ChatBot */
+    .hero-chatbot {
+      height: 100vh;
+      background: linear-gradient(rgba(10,15,44,0.7), rgba(10,15,44,0.7)), url('imagens/imagem-assistente.png') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .hero-chatbot h1 {
+      font-size: 3rem;
+      background: linear-gradient(to right, #00bfff, #6a5acd);
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .hero-chatbot p {
+      font-size: 1.3rem;
+      color: #eee;
+      font-style: italic;
+      margin-top: 1rem;
+      animation: fadeInUp 1.5s ease forwards;
+    }
+    
+    /* PROMPT FORM SECTION */
+    .prompt-form {
+      background: rgba(255,255,255,0.1);
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem auto;
+      max-width: 800px;
+    }
+    .prompt-form h2 {
+      color: #00bfff;
+      margin-bottom: 1rem;
+    }
+    .prompt-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #00bfff;
+    }
+    .prompt-form input,
+    .prompt-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    .prompt-form button {
+      padding: 0.75rem 1.5rem;
+      background-color: #00bfff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .prompt-form button:hover {
+      background-color: #0077cc;
+      transform: scale(1.05);
+    }
+    .prompt-form .input-url {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 1rem;
+    }
+    
+    /* CHAT INTERFACE SECTION */
+    .chat-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 20px;
+      background-color: #152036;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .chat-box {
+      border: 1px solid #00bfff;
+      padding: 15px;
+      height: 300px;
+      overflow-y: auto;
+      background-color: #0a1622;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    .input-group {
+      display: flex;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #00bfff;
+      background-color: #0a0f2c;
+      color: white;
+      border-radius: 4px 0 0 4px;
+    }
+    .input-group button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      background-color: #2980b9;
+      color: white;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .input-group button:hover {
+      background-color: #1f6391;
+      transform: scale(1.05);
+    }
+    
+    /* DIVIDER (Linha Azul Separadora) */
+    .divider {
+      border: none;
+      height: 2px;
+      background: #00bfff;
+      margin: 0;
+    }
+    
+    /* FOOTER */
+    footer {
+      background-color: #0a0f2c;
+      color: #aaa;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+    body.light-mode footer {
+      background-color: #e0e0e0;
+      color: #555;
+    }
+    footer .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer-left, .footer-center, .footer-right {
+      flex: 1;
+    }
+    .footer-left {
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .footer-center {
+      text-align: center;
+    }
+    .footer-center h3 {
+      margin-bottom: 0.5rem;
+      color: #00bfff;
+      font-size: 1rem;
+    }
+    .footer-center ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-center ul li {
+      display: inline-block;
+      margin: 0 0.5rem;
+    }
+    .footer-center ul li a {
+      color: #00bfff;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .footer-right {
+      text-align: right;
+    }
+    .footer-right h3 {
+      margin: 0;
+      padding-bottom: 0.25rem;
+      text-align: right;
+      color: #00bfff;
+      font-size: 1rem;
+    }
+    .footer-right ul {
+      margin: 0;
+      padding: 0;
+      text-align: right;
+    }
+    .footer-right ul li {
+      display: inline-block;
+      margin: 0 0.3rem;
+    }
+    .footer-right ul li a {
+      color: #00bfff;
+      font-size: 1.3rem;
+      text-decoration: none;
+    }
+    
+    /* ANIMAÇÃO FADE IN UP */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    /* SCROLL REVEAL */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(80px);
+      transition: all 0.8s ease;
+    }
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Botão Voltar ao Topo -->
+  <button id="btnTop" title="Voltar ao Topo">↑</button>
+  
+  <!-- Header -->
+  <header>
+    <a href="principal.html" class="logo">+DIGITAL</a>
+    <nav>
+      <ul>
+        <li><a href="quemsomos.html">Quem Somos</a></li>
+        <li><a href="solucoes.html">Soluções</a></li>
+        <li><a href="planos.html">Planos</a></li>
+        <li><a href="historias.html">Histórias de Sucesso</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="quero-comecar.html" class="cta">Quero Começar</a></li>
+      </ul>
+    </nav>
+    <button class="toggle-theme" onclick="toggleTheme()">🌙</button>
+    <div class="menu-toggle">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+  
+  <!-- Hero Section - ChatBot -->
+  <section class="hero-chatbot">
+    <div>
+      <h1>Crie Seu Site com Inteligência Artificial</h1>
+      <p>Sua visão, nossa inspiração – rápido, simples e gratuito.</p>
+    </div>
+  </section>
+  
+  <!-- Prompt Form Section -->
+  <section class="prompt-form" id="promptContainer">
+    <h2>Montagem do Site</h2>
+    <form id="sitePrompt">
+      <label for="nome-negocio">Nome do seu Negócio ou Projeto:</label>
+      <input type="text" id="nome-negocio" name="nome-negocio" placeholder="Ex: Minha Loja Virtual" required>
+      
+      <label for="objetivo">Objetivo do Site:</label>
+      <input type="text" id="objetivo" name="objetivo" placeholder="Ex: Apresentar produtos e captar clientes" required>
+      
+      <label for="cores">Cores Preferidas:</label>
+      <input type="text" id="cores" name="cores" placeholder="Ex: Azul, Branco e Cinza" required>
+      
+      <label for="secoes">Seções Desejadas:</label>
+      <input type="text" id="secoes" name="secoes" placeholder="Ex: Home, Sobre, Serviços, Contato" required>
+      
+      <label for="slogan">Slogan ou Mensagem Principal:</label>
+      <input type="text" id="slogan" name="slogan" placeholder="Ex: Conectando você ao futuro" required>
+      
+      <label for="detalhes">Detalhes Adicionais:</label>
+      <textarea id="detalhes" name="detalhes" rows="4" placeholder="Informe outras instruções importantes"></textarea>
+      
+      <label for="imagemUrl">URL da Imagem de Fundo (opcional):</label>
+      <input type="text" id="imagemUrl" name="imagemUrl" placeholder="https://exemplo.com/imagem.jpg">
+      <small class="input-url">Utilize um serviço de hospedagem de imagens e cole a URL aqui.</small>
+      
+      <button type="submit">Enviar e Criar Meu Site</button>
+    </form>
+  </section>
+  
+  <!-- Chat Interface Section (inicialmente oculta) -->
+  <section class="chat-container" id="chatContainer" style="display: none;">
+    <div class="chat-box" id="chat">
+      <!-- As mensagens aparecerão aqui -->
+    </div>
+    <div class="input-group">
+      <input type="text" id="entrada" placeholder="Digite sua mensagem aqui...">
+      <button onclick="enviarMensagem()">Enviar</button>
+    </div>
+    <div id="downloadButtons" style="text-align: center; margin-top: 10px; display: none;"></div>
+  </section>
+  
+  <!-- Divider (Linha Azul Separadora) -->
+  <hr class="divider">
+  
+  <!-- Rodapé -->
+  <footer>
+    <div class="container">
+      <div class="footer-left">
+        &copy; 2025 +DIGITAL. Todos os direitos reservados.
+      </div>
+      <div class="footer-center">
+        <h3>Outras Páginas</h3>
+        <ul>
+          <li><a href="parceiro.html">Seja um Parceiro</a></li>
+          <li><a href="suporte.html">Central de Suporte</a></li>
+          <li><a href="contato.html">Contato</a></li>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">
+        <h3>Redes Sociais</h3>
+        <ul>
+          <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+          <li><a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
+          <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+          <li><a href="https://wa.me/1234567890" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- JAVASCRIPT -->
+  <script>
+    // Botão voltar ao topo
+    const btnTop = document.getElementById("btnTop");
+    window.onscroll = function() {
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        btnTop.style.display = "block";
+      } else {
+        btnTop.style.display = "none";
+      }
+    };
+    btnTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    
+    // Toggle Modo Claro/Escuro
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+      const button = document.querySelector(".toggle-theme");
+      button.textContent = document.body.classList.contains("light-mode") ? "🌞" : "🌙";
+    }
+    
+    // Scroll Reveal Animation
+    document.addEventListener("DOMContentLoaded", function() {
+      const elements = document.querySelectorAll('.scroll-reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.2 });
+      elements.forEach(el => observer.observe(el));
+    });
+    
+    // FAQ - Acordeão (se houver, embora não seja essencial para a página ChatBot)
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', function() {
+        const faqItem = this.parentElement;
+        const answer = faqItem.querySelector('.faq-answer');
+        answer.style.display = answer.style.display === "block" ? "none" : "block";
+      });
+    });
+    
+    // Seção de Prompt e Chat (para gerar o site via IA)
+    let codigoGerado = "";
+    document.getElementById("sitePrompt").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const nome = document.getElementById("nome-negocio").value;
+      const objetivo = document.getElementById("objetivo").value;
+      const cores = document.getElementById("cores").value;
+      const secoes = document.getElementById("secoes").value;
+      const slogan = document.getElementById("slogan").value;
+      const detalhes = document.getElementById("detalhes").value;
+      const imagemUrl = document.getElementById("imagemUrl").value;
+      
+      let siteMessage = `Detalhes do Site:\n- Nome: ${nome}\n- Objetivo: ${objetivo}\n- Cores: ${cores}\n- Seções: ${secoes}\n- Slogan: ${slogan}\n- Detalhes: ${detalhes}`;
+      if (imagemUrl) {
+        siteMessage += `\n- Imagem de Fundo: ${imagemUrl}`;
+      }
+      const instrucaoFixa = `\n\nInstruções para a IA:\n` +
+        `Usando os dados acima, gere um código HTML completo para um site de microempresa, contendo Header, Hero, Conteúdo principal e Footer. ` +
+        `Se o código for extenso, divida-o em partes numeradas e retorne o código completo em HTML.`;
+      const mensagemFinal = siteMessage + instrucaoFixa;
+      
+      // Oculta o prompt e exibe a área de chat
+      document.getElementById("promptContainer").style.display = "none";
+      document.getElementById("chatContainer").style.display = "block";
+      
+      const chat = document.getElementById("chat");
+      const userDiv = document.createElement("div");
+      userDiv.classList.add("mensagem");
+      userDiv.innerHTML = `<span class="user">Você:</span> ${mensagemFinal.replace(/\n/g, '<br>')}`;
+      chat.appendChild(userDiv);
+      chat.scrollTop = chat.scrollHeight;
+      
+      enviarMensagemAutomatico(mensagemFinal);
+    });
+    
+    async function enviarMensagemAutomatico(mensagem) {
+      try {
+        const resposta = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer SEU_TOKEN_AQUI', // Substitua pelo seu token real
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'mistralai/mistral-7b-instruct:free',
+            messages: [
+              { role: 'system', content: 'Responda todas as mensagens em português.' },
+              { role: 'user', content: mensagem }
+            ]
+          })
+        });
+        const dados = await resposta.json();
+        codigoGerado = dados.choices[0].message.content;
+        const chat = document.getElementById("chat");
+        const botDiv = document.createElement("div");
+        botDiv.classList.add("mensagem");
+        botDiv.innerHTML = `<span class="bot">IA:</span> Código gerado com sucesso.`;
+        chat.appendChild(botDiv);
+        chat.scrollTop = chat.scrollHeight;
+        mostrarBotoesDownload();
+      } catch (error) {
+        const chat = document.getElementById("chat");
+        const erroDiv = document.createElement("div");
+        erroDiv.classList.add("mensagem");
+        erroDiv.innerHTML = `<span class="bot">IA:</span> Erro ao obter resposta. Tente novamente.`;
+        chat.appendChild(erroDiv);
+        chat.scrollTop = chat.scrollHeight;
+      }
+    }
+    
+    function mostrarBotoesDownload() {
+      const downloadButtons = document.getElementById("downloadButtons");
+      downloadButtons.style.display = "block";
+      downloadButtons.innerHTML = `
+        <button id="copiarBtn">Copiar Código</button>
+        <button id="baixarBtn">Baixar Código HTML</button>
+      `;
+      document.getElementById("copiarBtn").addEventListener("click", () => {
+        navigator.clipboard.writeText(codigoGerado)
+          .then(() => alert("Código copiado para a área de transferência!"))
+          .catch(() => alert("Falha ao copiar o código."));
+      });
+      document.getElementById("baixarBtn").addEventListener("click", () => {
+        baixarArquivo(codigoGerado, "site.html");
+      });
+    }
+    
+    function baixarArquivo(content, filename) {
+      const blob = new Blob([content], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+  
+  <!-- Firebase Integration opcional (caso precise gravar dados) - descomente se necessário -->
+  <!--
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "seu-projeto.firebaseapp.com",
+      projectId: "seu-projeto-id",
+      storageBucket: "seu-projeto.appspot.com",
+      messagingSenderId: "SEU_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
+    const appFirebase = initializeApp(firebaseConfig);
+    const db = getFirestore(appFirebase);
+    const form = document.querySelector('.formulario-contato');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nome = form.nome.value;
+      const email = form.email.value;
+      const telefone = form.telefone.value;
+      const mensagem = form.mensagem.value;
+      try {
+        await addDoc(collection(db, "contatos"), {
+          nome,
+          email,
+          telefone,
+          mensagem,
+          timestamp: new Date()
+        });
+        alert("Sua mensagem foi enviada com sucesso!");
+        form.reset();
+      } catch (error) {
+        console.error("Erro ao enviar a mensagem: ", error);
+        alert("Ocorreu um erro. Tente novamente.");
+      }
+    });
+  </script>
+  -->
+  
+</body>
+</html>
