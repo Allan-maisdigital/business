@@ -31,7 +31,6 @@
     body.light-mode a {
       color: #333 !important;
     }
-    
     /* BOTÃO VOLTAR AO TOPO (fora do header) */
     #btnTop {
       display: none;
@@ -53,7 +52,6 @@
     #btnTop:hover {
       background-color: #0056b3;
     }
-    
     /* HEADER */
     header {
       position: fixed;
@@ -82,7 +80,7 @@
     nav ul {
       list-style: none;
       display: flex;
-      align-items: center; /* Força que os itens da lista também fiquem centralizados */
+      align-items: center;
       gap: 2rem;
     }
     nav ul li a {
@@ -110,11 +108,12 @@
     }
     /* MENU ATUALIZADO: Itens da Página Home */
     nav ul li a.cta {
-      display: inline-block;  /* Força o elemento a agir como um bloco inline */
+      display: inline-block;
       background-color: #00bfff;
       color: white;
       padding: 0.5rem 1rem;
       border-radius: 5px;
+      text-decoration: none;
       transition: transform 0.3s ease, background-color 0.3s ease;
     }
     nav ul li a.cta:hover {
@@ -122,9 +121,8 @@
       transform: scale(1.10);
     }
     nav ul li a.cta::after {
-  display: none;
-}
-    
+      display: none;
+    }
     /* Toggle Modo Claro/Escuro */
     .toggle-theme {
       background: none;
@@ -149,7 +147,6 @@
       background-color: #007acc;
       color: white;
     }
-    
     /* Menu Mobile */
     .menu-toggle {
       display: none;
@@ -180,11 +177,11 @@
         display: flex;
       }
     }
-    
     /* HERO SECTION - ChatBot */
     .hero-chatbot {
       height: 100vh;
-      background: linear-gradient(rgba(10,15,44,0.7), rgba(10,15,44,0.7)), url('imagem-assistente.png') no-repeat center center/cover;
+      background: linear-gradient(rgba(10,15,44,0.7), rgba(10,15,44,0.7)),
+                  url('imagens/imagem-assistente.png') no-repeat center center/cover;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -205,7 +202,6 @@
       margin-top: 1rem;
       animation: fadeInUp 1.5s ease forwards;
     }
-    
     /* PROMPT FORM SECTION */
     .prompt-form {
       background: rgba(255,255,255,0.1);
@@ -251,7 +247,6 @@
       color: #ccc;
       margin-bottom: 1rem;
     }
-    
     /* CHAT INTERFACE SECTION */
     .chat-container {
       max-width: 800px;
@@ -296,7 +291,6 @@
       background-color: #1f6391;
       transform: scale(1.05);
     }
-    
     /* DIVIDER (Linha Azul Separadora) */
     .divider {
       border: none;
@@ -304,7 +298,6 @@
       background: #00bfff;
       margin: 0;
     }
-    
     /* FOOTER */
     footer {
       background-color: #0a0f2c;
@@ -378,7 +371,6 @@
       font-size: 1.3rem;
       text-decoration: none;
     }
-    
     /* ANIMAÇÃO FADE IN UP */
     @keyframes fadeInUp {
       0% { opacity: 0; transform: translateY(20px); }
@@ -397,294 +389,302 @@
   </style>
 </head>
 <body>
-  <!-- Botão Voltar ao Topo -->
-  <button id="btnTop" title="Voltar ao Topo">↑</button>
-  
-  <!-- Header -->
-  <header>
-    <a href="index.html" class="logo">+DIGITAL</a>
-    <nav>
+<!-- Botão Voltar ao Topo -->
+<button id="btnTop" title="Voltar ao Topo">↑</button>
+<!-- Header -->
+<header>
+  <a href="principal.html" class="logo">+DIGITAL</a>
+  <nav>
+    <ul>
+      <li><a href="quemsomos.html">Quem Somos</a></li>
+      <li><a href="solucoes.html">Soluções</a></li>
+      <li><a href="planos.html">Planos</a></li>
+      <li><a href="historias.html">Histórias de Sucesso</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="quero-comecar.html" class="cta">Quero Começar</a></li>
+    </ul>
+  </nav>
+  <button class="toggle-theme" onclick="toggleTheme()">🌙</button>
+  <div class="menu-toggle">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</header>
+<!-- Hero Section - ChatBot -->
+<section class="hero-chatbot">
+  <div>
+    <h1>Crie Seu Site com Inteligência Artificial</h1>
+    <p>Sua visão, nossa inspiração – rápido, simples e gratuito.</p>
+  </div>
+</section>
+<!-- Prompt Form Section -->
+<section class="prompt-form" id="promptContainer">
+  <h2>Montagem do Site</h2>
+  <form id="sitePrompt">
+    <label for="nome-negocio">Nome do seu Negócio ou Projeto:</label>
+    <input type="text" id="nome-negocio" name="nome-negocio" placeholder="Ex: Minha Loja Virtual" required>
+    <label for="objetivo">Objetivo do Site:</label>
+    <input type="text" id="objetivo" name="objetivo" placeholder="Ex: Apresentar produtos e captar clientes" required>
+    <label for="cores">Cores Preferidas:</label>
+    <input type="text" id="cores" name="cores" placeholder="Ex: Azul, Branco e Cinza" required>
+    <label for="secoes">Seções Desejadas:</label>
+    <input type="text" id="secoes" name="secoes" placeholder="Ex: Home, Sobre, Serviços, Contato" required>
+    <label for="slogan">Slogan ou Mensagem Principal:</label>
+    <input type="text" id="slogan" name="slogan" placeholder="Ex: Conectando você ao futuro" required>
+    <label for="detalhes">Detalhes Adicionais:</label>
+    <textarea id="detalhes" name="detalhes" rows="4" placeholder="Informe outras instruções importantes"></textarea>
+    <label for="imagemUrl">URL da Imagem de Fundo (opcional):</label>
+    <input type="text" id="imagemUrl" name="imagemUrl" placeholder="https://exemplo.com/imagem.jpg">
+    <small class="input-url">Utilize um serviço de hospedagem de imagens e cole a URL aqui.</small>
+    <button type="submit">Enviar e Criar Meu Site</button>
+  </form>
+</section>
+<!-- Chat Interface Section (inicialmente oculta) -->
+<section class="chat-container" id="chatContainer" style="display: none;">
+  <div class="chat-box" id="chat">
+    <!-- As mensagens aparecerão aqui -->
+  </div>
+  <div class="input-group">
+    <input type="text" id="entrada" placeholder="Digite sua mensagem aqui...">
+    <button onclick="enviarMensagem()">Enviar</button>
+  </div>
+  <div id="downloadButtons" style="text-align: center; margin-top: 10px; display: none;"></div>
+</section>
+<!-- Divider (Linha Azul Separadora) -->
+<hr class="divider">
+<!-- Rodapé -->
+<footer>
+  <div class="container">
+    <div class="footer-left">
+      &copy; 2025 +DIGITAL. Todos os direitos reservados.
+    </div>
+    <div class="footer-center">
+      <h3>Outras Páginas</h3>
       <ul>
-        <li><a href="quemsomos.html">Quem Somos</a></li>
-        <li><a href="solucoes.html">Soluções</a></li>
-        <li><a href="planos.html">Planos</a></li>
-        <li><a href="historias.html">Histórias de Sucesso</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="quero-comecar.html" class="cta">Quero Começar</a></li>
+        <li><a href="parceiro.html">Seja um Parceiro</a></li>
+        <li><a href="suporte.html">Central de Suporte</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="index.html">Home</a></li>
       </ul>
-    </nav>
-    <button class="toggle-theme" onclick="toggleTheme()">🌙</button>
-    <div class="menu-toggle">
-      <div></div>
-      <div></div>
-      <div></div>
     </div>
-  </header>
-  
-  <!-- Hero Section - ChatBot -->
-  <section class="hero-chatbot">
-    <div>
-      <h1>Crie Seu Site com Inteligência Artificial</h1>
-      <p>Sua visão, nossa inspiração – rápido, simples e gratuito.</p>
+    <div class="footer-right">
+      <h3>Redes Sociais</h3>
+      <ul>
+        <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+        <li><a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+        <li><a href="https://wa.me/1234567890" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+      </ul>
     </div>
-  </section>
-  
-  <!-- Prompt Form Section -->
-  <section class="prompt-form" id="promptContainer">
-    <h2>Montagem do Site</h2>
-    <form id="sitePrompt">
-      <label for="nome-negocio">Nome do seu Negócio ou Projeto:</label>
-      <input type="text" id="nome-negocio" name="nome-negocio" placeholder="Ex: Minha Loja Virtual" required>
-      
-      <label for="objetivo">Objetivo do Site:</label>
-      <input type="text" id="objetivo" name="objetivo" placeholder="Ex: Apresentar produtos e captar clientes" required>
-      
-      <label for="cores">Cores Preferidas:</label>
-      <input type="text" id="cores" name="cores" placeholder="Ex: Azul, Branco e Cinza" required>
-      
-      <label for="secoes">Seções Desejadas:</label>
-      <input type="text" id="secoes" name="secoes" placeholder="Ex: Home, Sobre, Serviços, Contato" required>
-      
-      <label for="slogan">Slogan ou Mensagem Principal:</label>
-      <input type="text" id="slogan" name="slogan" placeholder="Ex: Conectando você ao futuro" required>
-      
-      <label for="detalhes">Detalhes Adicionais:</label>
-      <textarea id="detalhes" name="detalhes" rows="4" placeholder="Informe outras instruções importantes"></textarea>
-      
-      <label for="imagemUrl">URL da Imagem de Fundo (opcional):</label>
-      <input type="text" id="imagemUrl" name="imagemUrl" placeholder="https://exemplo.com/imagem.jpg">
-      <small class="input-url">Utilize um serviço de hospedagem de imagens e cole a URL aqui.</small>
-      
-      <button type="submit">Enviar e Criar Meu Site</button>
-    </form>
-  </section>
-  
-  <!-- Chat Interface Section (inicialmente oculta) -->
-  <section class="chat-container" id="chatContainer" style="display: none;">
-    <div class="chat-box" id="chat">
-      <!-- As mensagens aparecerão aqui -->
-    </div>
-    <div class="input-group">
-      <input type="text" id="entrada" placeholder="Digite sua mensagem aqui...">
-      <button onclick="enviarMensagem()">Enviar</button>
-    </div>
-    <div id="downloadButtons" style="text-align: center; margin-top: 10px; display: none;"></div>
-  </section>
-  
-  <!-- Divider (Linha Azul Separadora) -->
-  <hr class="divider">
-  
-  <!-- Rodapé -->
-  <footer>
-    <div class="container">
-      <div class="footer-left">
-        &copy; 2025 +DIGITAL. Todos os direitos reservados.
-      </div>
-      <div class="footer-center">
-        <h3>Outras Páginas</h3>
-        <ul>
-          <li><a href="parceiro.html">Seja um Parceiro</a></li>
-          <li><a href="suporte.html">Central de Suporte</a></li>
-          <li><a href="contato.html">Contato</a></li>
-          <li><a href="index.html">Home</a></li>
-        </ul>
-      </div>
-      <div class="footer-right">
-        <h3>Redes Sociais</h3>
-        <ul>
-          <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-          <li><a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
-          <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-          <li><a href="https://wa.me/1234567890" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-  
-  <!-- JAVASCRIPT -->
-  <script>
-    // Botão voltar ao topo
-    const btnTop = document.getElementById("btnTop");
-    window.onscroll = function() {
-      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-        btnTop.style.display = "block";
-      } else {
-        btnTop.style.display = "none";
-      }
-    };
-    btnTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    
-    // Toggle Modo Claro/Escuro
-    function toggleTheme() {
-      document.body.classList.toggle("light-mode");
-      const button = document.querySelector(".toggle-theme");
-      button.textContent = document.body.classList.contains("light-mode") ? "🌞" : "🌙";
+  </div>
+</footer>
+<!-- JAVASCRIPT -->
+<script>
+  // Botão voltar ao topo
+  const btnTop = document.getElementById("btnTop");
+  window.onscroll = function() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      btnTop.style.display = "block";
+    } else {
+      btnTop.style.display = "none";
     }
-    
-    // Scroll Reveal Animation
-    document.addEventListener("DOMContentLoaded", function() {
-      const elements = document.querySelectorAll('.scroll-reveal');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.2 });
-      elements.forEach(el => observer.observe(el));
-    });
-    
-    // FAQ - Acordeão (se houver, embora não seja essencial para a página ChatBot)
-    const faqQuestions = document.querySelectorAll('.faq-question');
-    faqQuestions.forEach(question => {
-      question.addEventListener('click', function() {
-        const faqItem = this.parentElement;
-        const answer = faqItem.querySelector('.faq-answer');
-        answer.style.display = answer.style.display === "block" ? "none" : "block";
+  };
+  btnTop.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  // Toggle Modo Claro/Escuro
+  function toggleTheme() {
+    document.body.classList.toggle("light-mode");
+    const button = document.querySelector(".toggle-theme");
+    button.textContent = document.body.classList.contains("light-mode") ? "🌞" : "🌙";
+  }
+  // Scroll Reveal Animation
+  document.addEventListener("DOMContentLoaded", function() {
+    const elements = document.querySelectorAll('.scroll-reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
       });
+    }, { threshold: 0.2 });
+    elements.forEach(el => observer.observe(el));
+  });
+  // FAQ - Acordeão (se houver, embora não seja essencial para esta página)
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  faqQuestions.forEach(question => {
+    question.addEventListener('click', function() {
+      const faqItem = this.parentElement;
+      const answer = faqItem.querySelector('.faq-answer');
+      answer.style.display = answer.style.display === "block" ? "none" : "block";
     });
-    
-    // Seção de Prompt e Chat (para gerar o site via IA)
-    let codigoGerado = "";
-    document.getElementById("sitePrompt").addEventListener("submit", function(event) {
+  });
+  // Envio por tecla Enter no campo "entrada"
+  document.getElementById("entrada").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
       event.preventDefault();
-      const nome = document.getElementById("nome-negocio").value;
-      const objetivo = document.getElementById("objetivo").value;
-      const cores = document.getElementById("cores").value;
-      const secoes = document.getElementById("secoes").value;
-      const slogan = document.getElementById("slogan").value;
-      const detalhes = document.getElementById("detalhes").value;
-      const imagemUrl = document.getElementById("imagemUrl").value;
-      
-      let siteMessage = `Detalhes do Site:\n- Nome: ${nome}\n- Objetivo: ${objetivo}\n- Cores: ${cores}\n- Seções: ${secoes}\n- Slogan: ${slogan}\n- Detalhes: ${detalhes}`;
-      if (imagemUrl) {
-        siteMessage += `\n- Imagem de Fundo: ${imagemUrl}`;
+      enviarMensagem();
+    }
+  });
+  // Seção de Prompt e Chat (para enviar prompt e interagir com a IA)
+  let codigoGerado = "";
+  document.getElementById("sitePrompt").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const nome = document.getElementById("nome-negocio").value;
+    const objetivo = document.getElementById("objetivo").value;
+    const cores = document.getElementById("cores").value;
+    const secoes = document.getElementById("secoes").value;
+    const slogan = document.getElementById("slogan").value;
+    const detalhes = document.getElementById("detalhes").value;
+    const imagemUrl = document.getElementById("imagemUrl").value;
+    let siteMessage = `Detalhes do Site:\n- Nome: ${nome}\n- Objetivo: ${objetivo}\n- Cores: ${cores}\n- Seções: ${secoes}\n- Slogan: ${slogan}\n- Detalhes: ${detalhes}`;
+    if (imagemUrl) {
+      siteMessage += `\n- Imagem de Fundo: ${imagemUrl}`;
+    }
+    const instrucaoFixa = `\n\nInstruções para a IA:\n` +
+      `Responda todas as mensagens em português. Não questione o usuário.\n` +
+      `Usando os dados acima, gere um código HTML completo para um site de microempresa, contendo Header, Hero, Conteúdo principal e Footer. ` +
+      `Se o código for extenso, divida-o em partes numeradas e retorne o código completo em HTML.`;
+    const mensagemFinal = siteMessage + instrucaoFixa;
+    // Oculta o prompt e exibe a área de chat
+    document.getElementById("promptContainer").style.display = "none";
+    document.getElementById("chatContainer").style.display = "block";
+    const chat = document.getElementById("chat");
+    const userDiv = document.createElement("div");
+    userDiv.classList.add("mensagem");
+    userDiv.innerHTML = `<span class="user">Você:</span> ${mensagemFinal.replace(/\n/g, '<br>')}`;
+    chat.appendChild(userDiv);
+    chat.scrollTop = chat.scrollHeight;
+    enviarMensagemAutomatico(mensagemFinal);
+  });
+  async function enviarMensagemAutomatico(mensagem) {
+    const chat = document.getElementById("chat");
+    // Exibe indicativo de "digitando..."
+    const typingIndicator = document.createElement("div");
+    typingIndicator.classList.add("mensagem");
+    typingIndicator.innerHTML = `<span class="bot">Assistente:</span> <i class="fas fa-spinner fa-spin"></i>`;
+    chat.appendChild(typingIndicator);
+    chat.scrollTop = chat.scrollHeight;
+    try {
+      const resposta = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer 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',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'mistralai/mistral-7b-instruct:free',
+          messages: [
+            { role: 'system', content: 'Responda todas as mensagens em português. Não questione o usuário.' },
+            { role: 'user', content: mensagem }
+          ]
+        })
+      });
+      const dados = await resposta.json();
+      if (!dados.choices || !dados.choices[0] || !dados.choices[0].message) {
+        throw new Error("Resposta inválida da IA.");
       }
-      const instrucaoFixa = `\n\nInstruções para a IA:\n` +
-        `Usando os dados acima, gere um código HTML completo para um site de microempresa, contendo Header, Hero, Conteúdo principal e Footer. ` +
-        `Se o código for extenso, divida-o em partes numeradas e retorne o código completo em HTML.`;
-      const mensagemFinal = siteMessage + instrucaoFixa;
-      
-      // Oculta o prompt e exibe a área de chat
-      document.getElementById("promptContainer").style.display = "none";
-      document.getElementById("chatContainer").style.display = "block";
-      
-      const chat = document.getElementById("chat");
-      const userDiv = document.createElement("div");
-      userDiv.classList.add("mensagem");
-      userDiv.innerHTML = `<span class="user">Você:</span> ${mensagemFinal.replace(/\n/g, '<br>')}`;
-      chat.appendChild(userDiv);
+      codigoGerado = dados.choices[0].message.content;
+      typingIndicator.remove();
+      const botDiv = document.createElement("div");
+      botDiv.classList.add("mensagem");
+      botDiv.innerHTML = `<span class="bot">Assistente:</span> Código gerado com sucesso.`;
+      chat.appendChild(botDiv);
       chat.scrollTop = chat.scrollHeight;
-      
-      enviarMensagemAutomatico(mensagemFinal);
-    });
-    
-    async function enviarMensagemAutomatico(mensagem) {
-      try {
-        const resposta = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer SEU_TOKEN_AQUI', // Substitua pelo seu token real
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'mistralai/mistral-7b-instruct:free',
-            messages: [
-              { role: 'system', content: 'Responda todas as mensagens em português.' },
-              { role: 'user', content: mensagem }
-            ]
-          })
-        });
-        const dados = await resposta.json();
-        codigoGerado = dados.choices[0].message.content;
-        const chat = document.getElementById("chat");
-        const botDiv = document.createElement("div");
-        botDiv.classList.add("mensagem");
-        botDiv.innerHTML = `<span class="bot">IA:</span> Código gerado com sucesso.`;
-        chat.appendChild(botDiv);
-        chat.scrollTop = chat.scrollHeight;
-        mostrarBotoesDownload();
-      } catch (error) {
-        const chat = document.getElementById("chat");
-        const erroDiv = document.createElement("div");
-        erroDiv.classList.add("mensagem");
-        erroDiv.innerHTML = `<span class="bot">IA:</span> Erro ao obter resposta. Tente novamente.`;
-        chat.appendChild(erroDiv);
-        chat.scrollTop = chat.scrollHeight;
-      }
+      mostrarBotoesDownload();
+    } catch (error) {
+      typingIndicator.remove();
+      const erroDiv = document.createElement("div");
+      erroDiv.classList.add("mensagem");
+      erroDiv.innerHTML = `<span class="bot">Assistente:</span> Erro ao obter resposta. Tente novamente.`;
+      chat.appendChild(erroDiv);
+      chat.scrollTop = chat.scrollHeight;
     }
-    
-    function mostrarBotoesDownload() {
-      const downloadButtons = document.getElementById("downloadButtons");
-      downloadButtons.style.display = "block";
-      downloadButtons.innerHTML = `
-        <button id="copiarBtn">Copiar Código</button>
-        <button id="baixarBtn">Baixar Código HTML</button>
-      `;
-      document.getElementById("copiarBtn").addEventListener("click", () => {
-        navigator.clipboard.writeText(codigoGerado)
-          .then(() => alert("Código copiado para a área de transferência!"))
-          .catch(() => alert("Falha ao copiar o código."));
+  }
+  async function enviarMensagem() {
+    const input = document.getElementById("entrada");
+    const chat = document.getElementById("chat");
+    const mensagem = input.value.trim();
+    if (!mensagem) return;
+    // Exibe a mensagem do usuário
+    const userDiv = document.createElement("div");
+    userDiv.classList.add("mensagem");
+    userDiv.innerHTML = `<span class="user">Você:</span> ${mensagem}`;
+    chat.appendChild(userDiv);
+    input.value = "";
+    chat.scrollTop = chat.scrollHeight;
+    // Exibe o indicador de "digitando..."
+    const typingIndicator = document.createElement("div");
+    typingIndicator.classList.add("mensagem");
+    typingIndicator.innerHTML = `<span class="bot">Assistente:</span> <i class="fas fa-spinner fa-spin"></i>`;
+    chat.appendChild(typingIndicator);
+    chat.scrollTop = chat.scrollHeight;
+    try {
+      const resposta = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer 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",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "mistralai/mistral-7b-instruct:free",
+          messages: [
+            { role: "system", content: "Responda todas as mensagens em português. Não questione o usuário." },
+            { role: "user", content: mensagem }
+          ]
+        })
       });
-      document.getElementById("baixarBtn").addEventListener("click", () => {
-        baixarArquivo(codigoGerado, "site.html");
-      });
-    }
-    
-    function baixarArquivo(content, filename) {
-      const blob = new Blob([content], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }
-  </script>
+      const dados = await resposta.json();
+      if (!dados.choices || !dados.choices[0] || !dados.choices[0].message) {
+        throw new Error("Resposta inválida da IA.");
+}
+codigoGerado = dados.choices[0].message.content;
+typingIndicator.remove();
+const botDiv = document.createElement("div");
+botDiv.classList.add("mensagem");
+botDiv.innerHTML = `<span class="bot">Assistente:</span> ${codigoGerado}`;
+chat.appendChild(botDiv);
+chat.scrollTop = chat.scrollHeight;
+mostrarBotoesDownload();
+} catch (error) {
+  typingIndicator.remove();
+  const erroDiv = document.createElement("div");
+  erroDiv.classList.add("mensagem");
+  erroDiv.innerHTML = `<span class="bot">Assistente:</span> Erro ao obter resposta. Tente novamente.`;
+  chat.appendChild(erroDiv);
+  chat.scrollTop = chat.scrollHeight;
+}
+}
   
-  <!-- Firebase Integration opcional (caso precise gravar dados) - descomente se necessário -->
-  <!--
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-    const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "seu-projeto.firebaseapp.com",
-      projectId: "seu-projeto-id",
-      storageBucket: "seu-projeto.appspot.com",
-      messagingSenderId: "SEU_SENDER_ID",
-      appId: "SEU_APP_ID"
-    };
-    const appFirebase = initializeApp(firebaseConfig);
-    const db = getFirestore(appFirebase);
-    const form = document.querySelector('.formulario-contato');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const nome = form.nome.value;
-      const email = form.email.value;
-      const telefone = form.telefone.value;
-      const mensagem = form.mensagem.value;
-      try {
-        await addDoc(collection(db, "contatos"), {
-          nome,
-          email,
-          telefone,
-          mensagem,
-          timestamp: new Date()
-        });
-        alert("Sua mensagem foi enviada com sucesso!");
-        form.reset();
-      } catch (error) {
-        console.error("Erro ao enviar a mensagem: ", error);
-        alert("Ocorreu um erro. Tente novamente.");
-      }
-    });
-  </script>
-  -->
+function mostrarBotoesDownload() {
+  const downloadButtons = document.getElementById("downloadButtons");
+  downloadButtons.style.display = "block";
+  downloadButtons.innerHTML = `
+    <button id="copiarBtn">Copiar Código</button>
+    <button id="baixarBtn">Baixar Código HTML</button>
+  `;
+  document.getElementById("copiarBtn").addEventListener("click", () => {
+    navigator.clipboard.writeText(codigoGerado)
+      .then(() => alert("Código copiado para a área de transferência!"))
+      .catch(() => alert("Falha ao copiar o código."));
+  });
+  document.getElementById("baixarBtn").addEventListener("click", () => {
+    baixarArquivo(codigoGerado, "site.html");
+  });
+}
   
+function baixarArquivo(content, filename) {
+  const blob = new Blob([content], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+ </script>
 </body>
 </html>
